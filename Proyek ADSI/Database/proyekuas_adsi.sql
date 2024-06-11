@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 11, 2024 at 01:26 PM
+-- Generation Time: Jun 11, 2024 at 05:30 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -58,15 +58,6 @@ CREATE TABLE `cart` (
   `jumlah` int(10) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `cart`
---
-
-INSERT INTO `cart` (`id`, `product_id`, `nama_product`, `harga`, `img_src`, `jumlah`) VALUES
-(17, 2, 'baju biru', 200000, 'img/bajubiru.jpeg\r\n', 1),
-(18, 4, 'baju kuning', 200000, 'resources/placeholder.png', 1),
-(19, 5, 'baju hitam', 200000, 'resources/placeholder.png', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -77,8 +68,17 @@ CREATE TABLE `pelanggan` (
   `id_pelanggan` int(32) NOT NULL,
   `nama_pelanggan` varchar(128) NOT NULL,
   `noTelp_pelanggan` int(16) NOT NULL,
-  `alamat_pelanggan` varchar(255) NOT NULL
+  `alamat_pelanggan` varchar(255) NOT NULL,
+  `password` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pelanggan`
+--
+
+INSERT INTO `pelanggan` (`id_pelanggan`, `nama_pelanggan`, `noTelp_pelanggan`, `alamat_pelanggan`, `password`) VALUES
+(1, 'Adrian', 123456789, 'Jl. Siwalankerto 8', 'adrian'),
+(2, 'Tegar', 123456789, 'Jl Siwalankerto 22', 'tegar');
 
 -- --------------------------------------------------------
 
@@ -109,6 +109,18 @@ INSERT INTO `products` (`id`, `nama_product`, `deskripsi_product`, `harga`, `img
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sample_bank_db`
+--
+
+CREATE TABLE `sample_bank_db` (
+  `id_nasabah` int(128) NOT NULL,
+  `nama_nasabah` varchar(128) NOT NULL,
+  `pin` int(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `transaksi`
 --
 
@@ -119,6 +131,14 @@ CREATE TABLE `transaksi` (
   `total` int(255) NOT NULL,
   `transaction_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `transaksi`
+--
+
+INSERT INTO `transaksi` (`id`, `customer_id`, `customer_name`, `total`, `transaction_date`) VALUES
+(2769, 1, 'tester', 0, '2024-06-11 17:17:46'),
+(7546, 1, 'adrian', 0, '2024-06-11 17:27:20');
 
 --
 -- Indexes for dumped tables
@@ -150,6 +170,12 @@ ALTER TABLE `products`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `sample_bank_db`
+--
+ALTER TABLE `sample_bank_db`
+  ADD PRIMARY KEY (`id_nasabah`);
+
+--
 -- Indexes for table `transaksi`
 --
 ALTER TABLE `transaksi`
@@ -170,13 +196,13 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `pelanggan`
 --
 ALTER TABLE `pelanggan`
-  MODIFY `id_pelanggan` int(32) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pelanggan` int(32) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -185,10 +211,16 @@ ALTER TABLE `products`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT for table `sample_bank_db`
+--
+ALTER TABLE `sample_bank_db`
+  MODIFY `id_nasabah` int(128) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7547;
 
 --
 -- Constraints for dumped tables
@@ -204,7 +236,7 @@ ALTER TABLE `cart`
 -- Constraints for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  ADD CONSTRAINT `fk_customer` FOREIGN KEY (`customer_id`) REFERENCES `admins` (`id`);
+  ADD CONSTRAINT `fk_customer` FOREIGN KEY (`customer_id`) REFERENCES `pelanggan` (`id_pelanggan`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
