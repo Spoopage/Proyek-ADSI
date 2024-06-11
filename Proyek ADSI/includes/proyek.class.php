@@ -122,4 +122,20 @@ class Products
         $get_sum->execute();
         return $get_sum;
     }
+
+    public function insert_transaksi($data)
+    {
+        $insert_data = "INSERT INTO transaksi (customer_id, customer_name, total) VALUES (?, ?, ?)";
+        $insert_data = $this->db->prepare($insert_data);
+        $insert_data->execute($data);
+        return $insert_data;
+    }
+
+    public function get_transaksi()
+    {
+        $tampil_data = "SELECT * FROM transaksi ORDER BY transaction_date DESC";
+        $tampil_data = $this->db->prepare($tampil_data);
+        $tampil_data->execute();
+        return $tampil_data;
+    }
 }
