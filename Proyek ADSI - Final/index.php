@@ -84,7 +84,7 @@ function format($harga) {
         }
 
         .store_banner {
-            background-image: url("./resources/stock-photo-view-of-landscape-from-kloppenheim-country-estate-machadodorp-province-of-mpumalanga-south-2468214593.jpg");
+            background-image: url("./resources/wallpaper.png");
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;
