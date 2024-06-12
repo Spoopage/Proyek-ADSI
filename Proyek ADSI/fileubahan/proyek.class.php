@@ -13,7 +13,7 @@ class Products
     {
         $this->db = $db;
     }
-
+//==========================================awal=========================================
     public function insert_products($data) {
         $query = "INSERT INTO products (name, id, stock) VALUES (:name, :id, :stock)";
         $statement = $this->db->prepare($query);
@@ -24,7 +24,7 @@ class Products
 
         return $statement->execute();
     }
-
+//=================================ahkhir==============================================
     public function insert_cart($data)
     {
         $insert_data = "INSERT INTO cart SET product_id = ?, nama_product = ?, harga = ?, img_src = ?";
