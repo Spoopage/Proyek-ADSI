@@ -1,39 +1,99 @@
 <?php
-include './includes/connection.php';
-$sum = 0;
-if (isset($_GET['id'])) {
-    foreach ($pengiriman->get_cart_index((int) $_GET['id'])->fetchAll(PDO::FETCH_ASSOC) as $data) {
-        if (isset($_GET['delete'])) {
-            $insert_data = $pengiriman->delete_cart($_GET['id']);
+
+// if (isset($_POST['complete_order'])) {
+//     // Get cart items
+//     $query = "SELECT * FROM cart";
+//     $stmt = $conn->prepare($query);
+//     $stmt->execute();
+//     $cart_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // // Insert cart items into transaksi table
+    // foreach ($cart_items as $item) {
+    //     $id_transaksi = uniqid(); // Create a unique order ID
+    //     $product_name = $item['nama_product'];
+    //     $quantity = $item['jumlah'];
+    //     $price = $item['harga'];
+    //     $img_src = $item['img_src'];
+
+    //     $insert_order = "INSERT INTO transaksi (id_transaksi, product_name, quantity, price, img_src) VALUES (:id_transaksi, :product_name, :quantity, :price, :img_src)";
+    //     $stmt = $conn->prepare($insert_order);
+    //     $stmt->bindParam(':order_id', $id_transaksi);
+    //     $stmt->bindParam(':product_name', $product_name);
+    //     $stmt->bindParam(':quantity', $quantity);
+    //     $stmt->bindParam(':price', $price);
+    //     $stmt->bindParam(':img_src', $img_src);
+    //     $stmt->execute();
+    // }
+
+    include './includes/connection.php';
+
+    $sum = 0;
+    if (isset($_GET['id'])) {
+        foreach ($pengiriman->get_cart_index((int) $_GET['id'])->fetchAll(PDO::FETCH_ASSOC) as $data) {
+            if (isset($_GET['delete'])) {
+                $insert_data = $pengiriman->delete_cart($_GET['id']);
+            }
+            else if ((int)$_GET['jumlah'] >= 1) {
+                $insert_data = $pengiriman->update_jumlah_cart([
+                    $_GET['jumlah'],
+                    $_GET['id']
+                ]);
+            } else if ((int)$_GET['jumlah'] <= 0){
+                $insert_data = false;
+            } 
+            if ($insert_data)
+                header('location: cart.php?msg=berhasil_ditambahkan');
+            else
+                $msg = 'Data tidak berhasil diupdate, gunakan tombol delete untuk menghapus!';
         }
-        else if ((int)$_GET['jumlah'] >= 1) {
-            $insert_data = $pengiriman->update_jumlah_cart([
-                $_GET['jumlah'],
-                $_GET['id']
-            ]);
-        } else if ((int)$_GET['jumlah'] <= 0){
-            $insert_data = false;
-        }
-        if ($insert_data)
-            header('location: cart.php?msg=berhasil_ditambahkan');
-        else
-            $msg = 'Data tidak berhasil diupdate, gunakan tombol delete untuk menghapus!';
     }
-}
-
-function format($harga) {
-    $jum = "IDR " . number_format($harga,2,',','.');
-    return $jum;
-}
-
+    
+    function format($harga) {
+        $jum = "IDR " . number_format($harga,2,',','.');
+        return $jum;
+    }
+    
+    if (isset($_POST['complete_order'])) {
+        // Get the customer_id from the session or any other source
+        $customer_id = $_SESSION['login_customer'];
+    
+        // Fetch the customer_name from the pelanggan table
+        $query = "SELECT nama_pelanggan FROM pelanggan WHERE id_pelanggan = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([$customer_id]);
+        $customer_data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $customer_name = $customer_data['nama_pelanggan'];
+    
+        // Generate a unique transaction ID
+        $id_transaksi = uniqid();
+    
+        // Calculate the total price
+        $total = 0;
+        foreach ($pengiriman->tampil_cart()->fetchAll(PDO::FETCH_ASSOC) as $item) {
+            $total += $item['jumlah'] * $item['harga'];
+        }
+    
+        // Insert the transaction details into the transaksi table
+        $pengiriman->insert_transaksi([$id_transaksi, $customer_id, $customer_name, $total, date('Y-m-d H:i:s')]);
+    
+        // Clear the cart
+        $clear_cart = "DELETE FROM cart";
+        $clear_stmt = $conn->prepare($clear_cart);
+        $clear_stmt->execute();
+    
+        // Redirect to the receipt page with the necessary data
+        header("Location: receipt.php?id_transaksi=$id_transaksi&customer_id=$customer_id&customer_name=$customer_name&total=$total");
+        exit;
+    }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin</title>
+    <title>Shopping Cart</title>
 
     <!-- CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -59,10 +119,25 @@ function format($harga) {
             color: #fff;
         }
 
-        @font-face {
-            font-family: myFont;
-            src: url(img/coolvetica\ rg.otf);
-        }
+        /* #selesai_pesanan {
+            position: absolute;
+            right: 0px;
+            width: 300px;
+            border: 3px solid #73AD21;
+            padding: 10px;
+        } */
+
+        /* footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: #09111a;
+            color: #fff;
+            padding: 10px 0;
+            text-align: left;
+        } */
+
     </style>
 </head>
 
@@ -166,7 +241,20 @@ function format($harga) {
                     </table>
                 <?php endif ?>
             </div>
+
+            
         </div>
+
+        <!-- Selesaikan Pesanan -->
+        <div class="container my-3">
+            <form method="post" action="receipt.php">
+                <input type="hidden" name="id_transaksi" value="<?= $id_transaksi ?>">
+                <input type="hidden" name="customer_id" value="<?= $customer_id ?>">
+                <input type="hidden" name="customer_name" value="<?= $customer_name ?>">
+                <button type="submit" name="complete_order" class="btn btn-success">Selesaikan Pesanan</button>
+            </form>
+        </div>
+    
 
         <footer class="py-2 mt-5" style="background-color: #09111a;">
         <div class="container text-left text-light">
@@ -189,10 +277,10 @@ function format($harga) {
         </div>
     </footer>
 
-        <!-- Script -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
-            </script>
+    <!-- Script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    </script>
 </body>
 
 </html>
