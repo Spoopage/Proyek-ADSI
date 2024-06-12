@@ -143,9 +143,11 @@ function format($harga) {
                             <li class="nav-item">
                                 <a class="nav-link" aria-current="page" href="login_customer.php">LOGIN CUSTOMER</a>
                             </li>
+                            ini seng tak ubah nambah alamat
                             <li class="nav-item">
                               <a class="nav-link" aria-current="page" href="alamat.php">ALAMAT</a>
                              </li>
+                            ini seng tak ubah nambah alamat
                         </ul>
                         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                             <li class="nav-item">
