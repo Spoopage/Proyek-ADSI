@@ -2,6 +2,7 @@
 
 include 'includes/connection.php';
 
+//===========================AWAL=====================================
 if (isset($_POST['entry'])) {
     $name_product = trim($_POST['name_product']);
     $id_product = trim($_POST['id_product']);
@@ -196,7 +197,7 @@ if (isset($_POST['entry'])) {
         });
     }
 });
-
+//===============================AKHIR=========================================
 </script>
 </body>
 
