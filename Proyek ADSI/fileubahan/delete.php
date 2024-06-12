@@ -1,12 +1,12 @@
 <?php 
     include 'includes/connection.php'; 
 ?>
-
+//================================awal===============================
 <?php
 // Check if the 'id' parameter is set in the URL
 if (isset($_GET['id'])) {
     $productId = $_GET['id'];
-
+    
     // Delete the product from the database
     $sql = "DELETE FROM products WHERE id = ?";
     $stmt = $conn->prepare($sql);
@@ -16,4 +16,5 @@ if (isset($_GET['id'])) {
     header('Location: admin.php');
     exit();
 }
+//===============================akhir=================================
 ?>
