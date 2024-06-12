@@ -125,10 +125,15 @@ class Products
 
     public function insert_transaksi($data)
     {
-        $insert_data = "INSERT INTO transaksi (customer_id, customer_name, total) VALUES (?, ?, ?)";
+        $insert_data = "INSERT INTO transaksi (id, customer_id, customer_name, total, transaction_date) VALUES (?, ?, ?, ?, ?)";
         $insert_data = $this->db->prepare($insert_data);
         $insert_data->execute($data);
         return $insert_data;
+
+        // $insert_data = "INSERT INTO transaksi (customer_name, total, transaction_date) VALUES (?, ?, ?)";
+        // $insert_data = $this->db->prepare($insert_data);
+        // $insert_data->execute($data);
+        // return $insert_data;
     }
 
     public function get_transaksi()
@@ -138,4 +143,30 @@ class Products
         $tampil_data->execute();
         return $tampil_data;
     }
+
+    public function get_transaksi_by_id($id_transaksi) 
+    {
+        $query = "SELECT * FROM transaksi WHERE id='$id_transaksi'";
+        $query = $this->db->prepare($query);
+        $query->execute();
+        return $query;
+    }
+
+    public function get_pelanggan_by_id($id_pelanggan)
+    {
+        $query = "SELECT * FROM pelanggan WHERE id='$id_pelanggan'";
+        $query = $this->db->prepare($query);
+        $query->execute();
+        return $query;
+    }
+
+    public function get_pelanggan_by_name($nama_pelanggan) 
+    {
+        $query = "SELECT * FROM pelanggan WHERE nama_pelanggan='$nama_pelanggan'";
+        $query = $this->db->prepare($query);
+        $query->execute();
+        return $query;
+    }
+
 }
+
