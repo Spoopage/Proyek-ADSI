@@ -152,6 +152,11 @@ function format($harga) {
                                     </svg> VIEW CART
                                 </a>
                             </li>
+
+
+
+
+                            <----- TAMBAHI INI ----->
                             <li class="nav-item">
                                 <a class="nav-link" aria-current="page" href="order.php">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor"
@@ -160,6 +165,11 @@ function format($harga) {
                                     </svg> VIEW ORDER
                                 </a>
                             </li>
+                            <----- TAMBAHI INI ----->
+
+
+
+                            
                         </ul>
                     </div>
                 </div>
