@@ -58,12 +58,20 @@
         $customer_id = $_SESSION['login_customer'];
     
         // Fetch the customer_name from the pelanggan table
-        $query = "SELECT nama_pelanggan FROM pelanggan WHERE id_pelanggan = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->execute([$customer_id]);
-        $customer_data = $stmt->fetch(PDO::FETCH_ASSOC);
-        $customer_name = $customer_data['nama_pelanggan'];
+        // $query = "SELECT nama_pelanggan FROM pelanggan WHERE id_pelanggan = ?";
+        // $stmt = $conn->prepare($query);
+        // $stmt->execute([$customer_id]);
+        // $customer_data = $stmt->fetch(PDO::FETCH_ASSOC);
+        // $customer_name = $customer_data['nama_pelanggan'];
     
+        $query = "SELECT nama_pelanggan FROM pelanggan WHERE id_pelanggan = ?";
+        $stmt = mysqli_prepare($customer_id, $query); // Prepare the statement
+        mysqli_stmt_bind_param($stmt, "i", $customer_id); // Bind parameters
+        mysqli_stmt_execute($stmt); // Execute the statement
+        mysqli_stmt_bind_result($stmt, $customer_name); // Bind result
+        mysqli_stmt_fetch($stmt); // Fetch the result
+        mysqli_stmt_close($stmt); // Close the statement
+        
         // Generate a unique transaction ID
         $id_transaksi = uniqid();
     
