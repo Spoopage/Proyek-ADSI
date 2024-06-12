@@ -140,6 +140,9 @@ function format($harga) {
                             <li class="nav-item">
                                 <a class="nav-link " aria-current="page" href="login.php">LOGIN ADMIN</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="login_customer.php">LOGIN CUSTOMER</a>
+                            </li>
                         </ul>
                         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                             <li class="nav-item">
@@ -231,47 +234,6 @@ function format($harga) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // $(document).ready(function () {
-    //  $('#searchForm').submit(function (e) {
-    //     e.preventDefault();
-    //     var productName = $('#productName').val();
-
-    //     $.ajax({
-    //         type: 'GET',
-    //         url: 'search_products.php', 
-    //         data: { name: productName },
-    //         success: function (response) {
-                
-    //             $('.flex-wrap').html(response);
-    //         },
-    //         error: function () {
-    //             alert('Error occurred while searching for products.');
-    //         }
-    //     });
-    // });
-    //     $('.add-to-cart').click(function (e) {
-    //         e.preventDefault();
-
-    //         var productId = $(this).data('product-id');
-
-    //         $.ajax({
-    //             type: 'GET',
-    //             url: 'add_to_cart.php', 
-    //             data: { id: productId },
-    //             success: function (response) {
-    //                 if (response.success) {
-    //                     alert('Item added to cart successfully!');
-    //                 } else {
-    //                     alert(response.message);
-    //                 }
-    //             },
-    //             error: function () {
-    //                 alert('Error occurred while adding item to cart.');
-    //             }
-    //         });
-    //     });
-    // });
-
     $(document).ready(function () {
     $('#searchForm').submit(function (e) {
         e.preventDefault();
