@@ -1,24 +1,56 @@
 <?php
 include './includes/connection.php';
 
-$order_id = $_GET['order_id'];
+if (isset($_POST['complete_order'])) {
+    $id_transaksi = $_POST['id_transaksi'];
+    $customer_name = $_POST['customer_name'];
 
-$query = "SELECT * FROM transaksi WHERE order_id = :order_id";
-$stmt = $conn->prepare($query);
-$stmt->bindParam(':order_id', $order_id);
-$stmt->execute();
-$order_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Fetch the customer_id from the pelanggan table based on the customer_name
+    $query = "SELECT id_pelanggan FROM pelanggan WHERE nama_pelanggan = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([$customer_name]);
 
-$total = 0;
+    if ($stmt->rowCount() > 0) {
+        $customer_data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $customer_id = $customer_data['id_pelanggan'];
 
-if (!empty($order_items)) {
-    $customer_id = $order_items[0]['customer_id'];
-    $customer_name = $order_items[0]['customer_name'];
+        // Fetch the order items from the cart table
+        $query = "SELECT * FROM cart";
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        $order_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Calculate the total price
+        $total = 0;
+        foreach ($order_items as $item) {
+            $total += $item['jumlah'] * $item['harga'];
+        }
+
+        // Insert the transaction details into the transaksi table
+        if (isset($customer_id)) {
+            $insert_query = "INSERT INTO transaksi (id, customer_id, customer_name, total, transaction_date) VALUES (?, ?, ?, ?, NOW())";
+            $insert_stmt = $conn->prepare($insert_query);
+            $insert_stmt->execute([$id_transaksi, $customer_id, $customer_name, $total]);
+
+            // Clear the cart
+            $clear_cart = "DELETE FROM cart";
+            $clear_stmt = $conn->prepare($clear_cart);
+            $clear_stmt->execute();
+        } else {
+            // Handle the case when the customer_id is not set
+            echo "Error: Customer ID is not set correctly.";
+            exit;
+        }
+    } else {
+        // Handle the case when the customer is not found in the database
+        echo "Customer not found in the database.";
+        exit;
+    }
 }
 
 function format($angka)
 {
-    return 'Rp ' . number_format($angka, 2, ',', '.');
+    return 'IDR ' . number_format($angka, 2, ',', '.');
 }
 ?>
 
@@ -45,14 +77,12 @@ function format($angka)
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($order_items as $item): 
-                    $total += $item['quantity'] * $item['price'];
-                ?>
+                <?php foreach ($order_items as $item): ?>
                     <tr>
                         <td><img style="width: 150px; height: 150px" src="<?= $item['img_src'] ?>" alt=""></td>
-                        <td><?= $item['product_name'] ?></td>
-                        <td><?= $item['quantity'] ?></td>
-                        <td><?= format($item['price']) ?></td>
+                        <td><?= $item['nama_product'] ?></td>
+                        <td><?= $item['jumlah'] ?></td>
+                        <td><?= format($item['harga']) ?></td>
                     </tr>
                 <?php endforeach; ?>
                 <tr>
