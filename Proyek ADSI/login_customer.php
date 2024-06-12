@@ -1,6 +1,7 @@
 <?php
 
 include './includes/connection.php';
+// session_start();
 
 if (isset($_POST['login_customer'])) {
     // $id = $_POST['id_pelanggan'];
@@ -17,7 +18,7 @@ if (isset($_POST['login_customer'])) {
     else if (!password_verify($password, $fetch_pelanggan['password'])) {
         $msg = 'Password yang Anda ketik salah!';
     } else {
-        $_SESSION['login'] = $fetch_pelanggan['id'];
+        $_SESSION['login_customer'] = $fetch_pelanggan['id_pelanggan'];
         header('location: index.php');
     }
 }
