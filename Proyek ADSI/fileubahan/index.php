@@ -135,11 +135,17 @@ function format($harga) {
                     <div class="offcanvas-body">
                         <ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php">STORE</a>
+                                <a class="nav-link active" aria-current="page" href="index.php">STORE</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="login.php">LOGIN ADMIN</a>
+                                <a class="nav-link " aria-current="page" href="login.php">LOGIN ADMIN</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="login_customer.php">LOGIN CUSTOMER</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" aria-current="page" href="alamat.php">ALAMAT</a>
+                             </li>
                         </ul>
                         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                             <li class="nav-item">
@@ -152,24 +158,6 @@ function format($harga) {
                                     </svg> VIEW CART
                                 </a>
                             </li>
-
-
-
-
-                            <----- TAMBAHI INI ----->
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="order.php">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor"
-                                        class="bi bi-list" viewBox="0 0 16 16">
-                                        <path d="M3 4h10v1H3V4zm0 3h10v1H3V7zm0 3h10v1H3v-1z" />
-                                    </svg> VIEW ORDER
-                                </a>
-                            </li>
-                            <----- TAMBAHI INI ----->
-
-
-
-                            
                         </ul>
                     </div>
                 </div>
