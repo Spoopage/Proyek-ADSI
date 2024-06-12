@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 11, 2024 at 05:30 PM
+-- Generation Time: Jun 12, 2024 at 10:13 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -58,6 +58,17 @@ CREATE TABLE `cart` (
   `jumlah` int(10) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`id`, `product_id`, `nama_product`, `harga`, `img_src`, `jumlah`) VALUES
+(41, 3, 'baju merah', 200000, 'resources/placeholder.png', 1),
+(42, 5, 'baju hitam', 200000, 'resources/placeholder.png', 1),
+(43, 4, 'baju kuning', 200000, 'resources/placeholder.png', 1),
+(44, 2, 'baju biru', 200000, 'resources/placeholder.png\r\n', 1),
+(45, 7, 'Baju Hijau', 200000, 'resources/placeholder.png', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -77,8 +88,8 @@ CREATE TABLE `pelanggan` (
 --
 
 INSERT INTO `pelanggan` (`id_pelanggan`, `nama_pelanggan`, `noTelp_pelanggan`, `alamat_pelanggan`, `password`) VALUES
-(1, 'Adrian', 123456789, 'Jl. Siwalankerto 8', 'adrian'),
-(2, 'Tegar', 123456789, 'Jl Siwalankerto 22', 'tegar');
+(1, 'Adrian', 123456789, 'Jl. Siwalankerto 8', '$2y$10$/dcc4HgbHxqgLYhCFYCB3uTusDzSbicq6vCmtk6IS5/eSDGWUqfPW'),
+(2, 'Timoen', 123456789, 'Jl Siwalankerto 22', '$2y$10$Vg4cQVNPMj8f2m4O3ySZDeE7YuKzpvl2A1YsNs6PbbAxI1Ld/yHMm');
 
 -- --------------------------------------------------------
 
@@ -137,8 +148,9 @@ CREATE TABLE `transaksi` (
 --
 
 INSERT INTO `transaksi` (`id`, `customer_id`, `customer_name`, `total`, `transaction_date`) VALUES
-(2769, 1, 'tester', 0, '2024-06-11 17:17:46'),
-(7546, 1, 'adrian', 0, '2024-06-11 17:27:20');
+(22, 1, 'Adrian', 200000, '0000-00-00 00:00:00'),
+(3436, 1, 'adrian', 0, '2024-06-11 18:02:36'),
+(7121, 1, 'adrian', 0, '2024-06-11 18:04:00');
 
 --
 -- Indexes for dumped tables
@@ -196,7 +208,7 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `pelanggan`
@@ -220,7 +232,7 @@ ALTER TABLE `sample_bank_db`
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7547;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9401;
 
 --
 -- Constraints for dumped tables
