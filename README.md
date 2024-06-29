@@ -25,7 +25,7 @@ receipt.php
 
 ================================================================================================================================
 
-Abraham Christopher Abisha Chandra-C14220153:
+Abraham Christopher Abisha Chandra-C14220153: Memanage Stock Barang
 
 file yang diubah:
 edit.php
